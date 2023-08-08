@@ -39,6 +39,7 @@ public class EnemyBullet : MonoBehaviour
                 }
             }
         }
+
         else
         {
             Destroy(otherObject.gameObject);

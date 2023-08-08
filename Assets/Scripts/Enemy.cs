@@ -39,7 +39,6 @@ public class Enemy : MonoBehaviour
                 dir = (player.transform.position - gameObject.transform.position).normalized;
             }
         }
-
         transform.position += dir * speed * Time.deltaTime;
     }
 
