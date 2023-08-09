@@ -46,6 +46,13 @@ public class EnemyBullet : MonoBehaviour
                     AudioSource audioSource2 = soundManagerGO.GetComponent<SoundManager>().effAS;
                     audioSource.clip = soundManagerGO.GetComponent<SoundManager>().explosionAC[1];
                     audioSource.Play();
+                    
+                    GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
+                        gameManager.bestScore = gameManager.score;
+                        gameManager.BestScoreText.text = gameManager.bestScore.ToString();
+                        PlayerPrefs.SetInt("Best Score", gameManager.bestScore);
+
                 }
             }
         }

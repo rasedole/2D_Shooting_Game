@@ -5,6 +5,7 @@ using UnityEngine;
 //목표 : 내가(총알이) 위로 날아간다.
 //방향이 필요하다.
 //속도가 필요하다.
+
 public class Bullet : MonoBehaviour
 {
     public float speed = 1.0f;
@@ -28,6 +29,4 @@ public class Bullet : MonoBehaviour
     {
         Destroy(gameObject);
     }
-
-
 }
