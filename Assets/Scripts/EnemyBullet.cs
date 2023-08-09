@@ -33,9 +33,19 @@ public class EnemyBullet : MonoBehaviour
                 int playerHP = --player.GetComponent<PlayerMove>().hp;
                 GameObject hitGO = Instantiate(hit);
                 hitGO.transform.position = transform.position;
-                if(playerHP <= 0)
+
+                GameObject soundManagerGO = GameObject.Find("SoundManager");
+                AudioSource audioSource = soundManagerGO.GetComponent<SoundManager>().effAS;
+                audioSource.clip = soundManagerGO.GetComponent<SoundManager>().explosionAC[0];
+                audioSource.Play();
+
+                if (playerHP <= 0)
                 {
                     Destroy(otherObject.gameObject);
+                    GameObject soundManagerGO2 = GameObject.Find("SoundManager");
+                    AudioSource audioSource2 = soundManagerGO.GetComponent<SoundManager>().effAS;
+                    audioSource.clip = soundManagerGO.GetComponent<SoundManager>().explosionAC[1];
+                    audioSource.Play();
                 }
             }
         }

@@ -17,6 +17,11 @@ public class PlayerFire : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             ExcuteSkill(skillLevel);
+
+            GameObject soundManagerGO = GameObject.Find("SoundManager");
+            AudioSource audioSource = soundManagerGO.GetComponent<SoundManager>().effAS;
+            audioSource.clip = soundManagerGO.GetComponent<SoundManager>().explosionAC[2];
+            audioSource.Play();
         }
     }
 
@@ -91,7 +96,10 @@ public class PlayerFire : MonoBehaviour
     {
         if(other.gameObject.tag == "Item")
         {
-            skillLevel++;
+            if(skillLevel < 3)
+            {
+                skillLevel++;
+            }
             Destroy(other.gameObject);
         }
     }

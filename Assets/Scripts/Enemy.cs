@@ -55,6 +55,10 @@ public class Enemy : MonoBehaviour
             Destroy(this.gameObject);
             GameObject explosionGO = Instantiate(explosion);
             explosionGO.transform.position = transform.position;
+            GameObject soundManagerGO = GameObject.Find("SoundManager");
+            AudioSource audioSource = soundManagerGO.GetComponent<SoundManager>().effAS;
+            audioSource.clip = soundManagerGO.GetComponent<SoundManager>().explosionAC[1];
+            audioSource.Play();
         }
         else if(hp <= 0)
         {
@@ -62,6 +66,10 @@ public class Enemy : MonoBehaviour
             GameObject explosionGO = Instantiate(explosion);
             explosionGO.transform.position = transform.position;
             Destroy(otherObject.gameObject);
+            GameObject soundManagerGO = GameObject.Find("SoundManager");
+            AudioSource audioSource = soundManagerGO.GetComponent<SoundManager>().effAS;
+            audioSource.clip = soundManagerGO.GetComponent<SoundManager>().explosionAC[1];
+            audioSource.Play();
         }
         else
         {
