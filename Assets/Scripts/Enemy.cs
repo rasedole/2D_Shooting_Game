@@ -14,13 +14,11 @@ public class Enemy : MonoBehaviour
     public Vector3 dir = Vector3.down;
     public GameObject explosion;
     protected GameObject player;
-    protected GameManager gameManager;
     int randValue = 0;
     // Update is called once per frame
 
     private void Start()
     {
-        gameManager = GameObject.Find("gameManager").GetComponent<GameManager>();
         randValue = Random.Range(0, 10);
         player = GameObject.Find("Player");
 
@@ -48,8 +46,7 @@ public class Enemy : MonoBehaviour
     private void OnCollisionEnter(Collision otherObject)
     {
         hp--;
-        gameManager.score += gameManager.attackScore;
-        gameManager.ScoreText.text = gameManager.score.ToString();
+        GameManager.instance.SetAttackScore();
 
         if (otherObject.gameObject.tag == "Player")
         {
@@ -57,40 +54,33 @@ public class Enemy : MonoBehaviour
 
             if (player.GetComponent<PlayerMove>().hp <= 0)
             {
-                Destroy(otherObject.gameObject);
+                otherObject.gameObject.SetActive(false);
 
-                    gameManager.bestScore = gameManager.score;
-                    gameManager.BestScoreText.text = gameManager.bestScore.ToString();
-                    PlayerPrefs.SetInt("Best Score", gameManager.bestScore);
+                GameManager.instance.SetBestScore();
             }
 
-            Destroy(this.gameObject);
+            GameManager.instance.SetDestroyScore();
+            this.gameObject.SetActive(false);
             GameObject explosionGO = Instantiate(explosion);
             explosionGO.transform.position = transform.position;
-            GameObject soundManagerGO = GameObject.Find("SoundManager");
-            AudioSource audioSource = soundManagerGO.GetComponent<SoundManager>().effAS;
-            audioSource.clip = soundManagerGO.GetComponent<SoundManager>().explosionAC[1];
+            AudioSource audioSource = SoundManager.instance.GetComponent<SoundManager>().effAS;
+            audioSource.clip = SoundManager.instance.GetComponent<SoundManager>().explosionAC[1];
             audioSource.Play();
-            gameManager.score += gameManager.destroyScore;
-            gameManager.ScoreText.text = gameManager.score.ToString();
-
         }
         else if (hp <= 0)
         {
-            Destroy(this.gameObject);
+            GameManager.instance.SetDestroyScore();
+            this.gameObject.SetActive(false);
             GameObject explosionGO = Instantiate(explosion);
             explosionGO.transform.position = transform.position;
-            Destroy(otherObject.gameObject);
-            GameObject soundManagerGO = GameObject.Find("SoundManager");
-            AudioSource audioSource = soundManagerGO.GetComponent<SoundManager>().effAS;
-            audioSource.clip = soundManagerGO.GetComponent<SoundManager>().explosionAC[1];
+            otherObject.gameObject.SetActive(false);
+            AudioSource audioSource = SoundManager.instance.GetComponent<SoundManager>().effAS;
+            audioSource.clip = SoundManager.instance.GetComponent<SoundManager>().explosionAC[1];
             audioSource.Play();
-            //gameManager.score += gameManager.destroyScore;
-            //gameManager.ScoreText.text = gameManager.score.ToString();
         }
         else
         {
-            Destroy(otherObject.gameObject);
+            otherObject.gameObject.SetActive(false);
         }
     }
 

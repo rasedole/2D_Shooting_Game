@@ -11,6 +11,8 @@ public class EnemyBullet : MonoBehaviour
     public Vector3 dir = Vector3.down;
     public GameObject hit;
     protected GameObject player;
+    public int parantID;
+
     //매 프레임마다 총알이 위로 날아간다.
     // Update is called once per frame
     private void Start()
@@ -29,29 +31,23 @@ public class EnemyBullet : MonoBehaviour
         {
             if (otherObject.gameObject.tag == "Player")
             {
-                Destroy(gameObject);
+                gameObject.SetActive(false);
                 int playerHP = --player.GetComponent<PlayerMove>().hp;
                 GameObject hitGO = Instantiate(hit);
                 hitGO.transform.position = transform.position;
 
-                GameObject soundManagerGO = GameObject.Find("SoundManager");
-                AudioSource audioSource = soundManagerGO.GetComponent<SoundManager>().effAS;
-                audioSource.clip = soundManagerGO.GetComponent<SoundManager>().explosionAC[0];
+                AudioSource audioSource = SoundManager.instance.GetComponent<SoundManager>().effAS;
+                audioSource.clip = SoundManager.instance.GetComponent<SoundManager>().explosionAC[0];
                 audioSource.Play();
 
                 if (playerHP <= 0)
                 {
-                    Destroy(otherObject.gameObject);
-                    GameObject soundManagerGO2 = GameObject.Find("SoundManager");
-                    AudioSource audioSource2 = soundManagerGO.GetComponent<SoundManager>().effAS;
-                    audioSource.clip = soundManagerGO.GetComponent<SoundManager>().explosionAC[1];
+                    otherObject.gameObject.SetActive(false);
+                    AudioSource audioSource2 = SoundManager.instance.GetComponent<SoundManager>().effAS;
+                    audioSource.clip = SoundManager.instance.GetComponent<SoundManager>().explosionAC[1];
                     audioSource.Play();
-                    
-                    GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
-                        gameManager.bestScore = gameManager.score;
-                        gameManager.BestScoreText.text = gameManager.bestScore.ToString();
-                        PlayerPrefs.SetInt("Best Score", gameManager.bestScore);
+                    GameManager.instance.SetBestScore();
 
                 }
             }
@@ -59,8 +55,8 @@ public class EnemyBullet : MonoBehaviour
 
         else
         {
-            Destroy(otherObject.gameObject);
-            Destroy(gameObject);
+            otherObject.gameObject.SetActive(false);
+            gameObject.SetActive(false);
             GameObject hitGO = Instantiate(hit);
             hitGO.transform.position = transform.position;
         }

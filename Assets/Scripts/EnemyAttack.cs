@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyAttack : MonoBehaviour
 {
+    public int poolSize = 10;
+    public List<GameObject> bulletObjectPool;
     public float attackTime = 5.0f;
     private float currentTime = 0;
     public GameObject bullet;
@@ -14,29 +16,44 @@ public class EnemyAttack : MonoBehaviour
     private void Start()
     {
         player = GameObject.Find("Player");
+        bulletObjectPool = new List<GameObject>();
+
+        for (int i = 0; i < poolSize; i++)
+        {
+            GameObject bulletGO = Instantiate(bullet);
+
+            bulletObjectPool.Add(bulletGO);
+            bulletGO.SetActive(false);
+            bulletGO.GetComponent<EnemyBullet>().parantID = GetInstanceID();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(player != null)
+        if (player != null)
         {
             currentTime += Time.deltaTime;
 
             if (currentTime > attackTime)
             {
-                GameObject bulletGO = Instantiate(bullet);
+                if(bulletObjectPool.Count > 0)
+                {
+                    GameObject bulletGO = bulletObjectPool[0];
 
-                bulletGO.transform.position = gunPos.transform.position;
+                    bulletGO.SetActive(true);
+                    bulletGO.transform.position = gunPos.transform.position;
 
-                playerDir = (player.transform.position - gameObject.transform.position).normalized;
-                bulletGO.GetComponent<EnemyBullet>().dir = playerDir;
+                    playerDir = (player.transform.position - gameObject.transform.position).normalized;
+                    bulletGO.GetComponent<EnemyBullet>().dir = playerDir;
 
-                bulletGO.transform.rotation = Quaternion.FromToRotation(Vector3.down, playerDir);
-                bulletGO.transform.rotation *= Quaternion.Euler(0, 0, -90);
+                    bulletGO.transform.rotation = Quaternion.FromToRotation(Vector3.down, playerDir);
+                    bulletGO.transform.rotation *= Quaternion.Euler(0, 0, -90);
 
+                    bulletObjectPool.Remove(bulletGO);
+                }
                 currentTime = 0;
             }
         }
     }
-}   
+}

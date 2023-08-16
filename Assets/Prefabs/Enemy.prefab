@@ -144,6 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93b8402bbca4bbf419e6e1b3bb1df8d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  poolSize: 10
   attackTime: 1
   bullet: {fileID: 3781762232103237911, guid: 23eda34965ed3934784337f7b3335076, type: 3}
   gunPos: {fileID: 2196656823581414061}

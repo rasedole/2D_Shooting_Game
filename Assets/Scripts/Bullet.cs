@@ -12,6 +12,7 @@ public class Bullet : MonoBehaviour
     public Vector3 dir = Vector3.up;
     protected GameObject player;
 
+
     //매 프레임마다 총알이 위로 날아간다.
     // Update is called once per frame
 
@@ -27,6 +28,6 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision otherObject)
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }

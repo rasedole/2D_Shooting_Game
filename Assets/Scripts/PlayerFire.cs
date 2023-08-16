@@ -5,11 +5,41 @@ using UnityEngine;
 
 //목표: 사용자 입력(Space)를 입력받아 총알을 생성한다
 
+// 목표 : 불릿 풀을 만들어서 관리하고 싶다.
+// 속성 : 불릿의 개수, 오브젝트 풀 배열
+// 순서1. 불릿의 개수만큼의 배열을 생성한다.
+// 순서2. 불릿 게임 오브젝트를 생성한다.
+// 순서3. 생성한 게임 오브젝트를 풀에 넣는다.
+// 순서4. 게임오브젝트를 비활성화 해준다.
+
+// 목표 : 불릿 오브젝트 풀에서 불릿이 비활성화 되어있다면 활성화 시킨다.
+
 public class PlayerFire : MonoBehaviour
 {
     public GameObject bullet;
     public GameObject gunPos;
     public int skillLevel = 0;
+    public int poolSize = 100;
+    public List<GameObject> bulletObjectPool;
+
+    private void Start()
+    {
+        // 순서1. 불릿의 개수만큼의 배열을 생성한다.
+        bulletObjectPool = new List<GameObject>();
+
+        for (int i = 0; i < poolSize; i++)
+        {
+            // 순서2. 불릿 게임 오브젝트를 생성한다.
+            GameObject bulletGO = Instantiate(bullet);
+
+            // 순서3. 생성한 게임 오브젝트를 풀에 넣는다.
+            bulletObjectPool.Add(bulletGO);
+
+            // 순서4. 게임오브젝트를 비활성화 해준다.
+            bulletGO.SetActive(false);
+            bulletGO.transform.parent = transform;
+        }
+    }
 
     // Update is called once per frame
     void Update()
@@ -18,9 +48,8 @@ public class PlayerFire : MonoBehaviour
         {
             ExcuteSkill(skillLevel);
 
-            GameObject soundManagerGO = GameObject.Find("SoundManager");
-            AudioSource audioSource = soundManagerGO.GetComponent<SoundManager>().effAS;
-            audioSource.clip = soundManagerGO.GetComponent<SoundManager>().explosionAC[2];
+            AudioSource audioSource = SoundManager.instance.GetComponent<SoundManager>().effAS;
+            audioSource.clip = SoundManager.instance.GetComponent<SoundManager>().explosionAC[2];
             audioSource.Play();
         }
     }
@@ -39,7 +68,7 @@ public class PlayerFire : MonoBehaviour
                 ExcuteSkill3();
                 break;
             case 3:
-                ExcuteSkill4(); 
+                ExcuteSkill4();
                 break;
 
         }
@@ -47,35 +76,81 @@ public class PlayerFire : MonoBehaviour
 
     void ExcuteSkill1()
     {
-        GameObject bulletGO = Instantiate(bullet);
-        bulletGO.transform.position = gunPos.transform.position;
+        if(bulletObjectPool.Count > 0)
+        {
+            GameObject bulletGO = bulletObjectPool[0];
+
+            bulletGO.SetActive(true);
+
+            bulletGO.transform.position = gunPos.transform.position;
+
+            bulletObjectPool.Remove(bulletGO);
+        }
     }
 
     void ExcuteSkill2()
     {
-        GameObject bulletGO = Instantiate(bullet);
-        bulletGO.transform.position = gunPos.transform.position + new Vector3(-0.3f,0,0);
+        if (bulletObjectPool.Count > 0)
+        {
+            GameObject bulletGO = bulletObjectPool[0];
 
-        GameObject bulletGO2 = Instantiate(bullet);
-        bulletGO2.transform.position = gunPos.transform.position + new Vector3(0.3f,0,0);
+            bulletGO.SetActive(true);
+
+            bulletGO.transform.position = gunPos.transform.position + new Vector3(-0.3f, 0, 0);
+
+            bulletObjectPool.Remove(bulletGO);
+        }
+
+        if (bulletObjectPool.Count > 0)
+        {
+            GameObject bulletGO = bulletObjectPool[0];
+
+            bulletGO.SetActive(true);
+
+            bulletGO.transform.position = gunPos.transform.position + new Vector3(0.3f, 0, 0);
+
+            bulletObjectPool.Remove(bulletGO);
+        }
     }
 
     void ExcuteSkill3()
     {
-        GameObject bulletGO = Instantiate(bullet);
-        bulletGO.transform.position = gunPos.transform.position + new Vector3(-0.3f, 0, 0);
-        bulletGO.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 30));
-        //bulletGO.GetComponent<Bullet>().dir += new Vector3(-0.3f, 0, 0);
-        bulletGO.GetComponent<Bullet>().dir = bulletGO.transform.up;
+        if (bulletObjectPool.Count > 0)
+        {
+            GameObject bulletGO = bulletObjectPool[0];
 
-        GameObject bulletGO2 = Instantiate(bullet);
-        bulletGO2.transform.position = gunPos.transform.position + new Vector3(0.3f, 0, 0);
-        bulletGO2.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -30));
-        //bulletGO2.GetComponent<Bullet>().dir += new Vector3(0.3f, 0, 0);
-        bulletGO2.GetComponent<Bullet>().dir = bulletGO2.transform.up;
+            bulletGO.SetActive(true);
 
-        GameObject bulletGO3 = Instantiate(bullet);
-        bulletGO3.transform.position = gunPos.transform.position;
+            bulletGO.transform.position = gunPos.transform.position + new Vector3(-0.3f, 0, 0);
+            bulletGO.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 30));
+            bulletGO.GetComponent<Bullet>().dir = bulletGO.transform.up;
+
+            bulletObjectPool.Remove(bulletGO);
+        }
+
+        if (bulletObjectPool.Count > 0)
+        {
+            GameObject bulletGO = bulletObjectPool[0];
+
+            bulletGO.SetActive(true);
+
+            bulletGO.transform.position = gunPos.transform.position + new Vector3(0.3f, 0, 0);
+            bulletGO.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -30));
+            bulletGO.GetComponent<Bullet>().dir = bulletGO.transform.up;
+
+            bulletObjectPool.Remove(bulletGO);
+        }
+
+        if (bulletObjectPool.Count > 0)
+        {
+            GameObject bulletGO = bulletObjectPool[0];
+
+            bulletGO.SetActive(true);
+
+            bulletGO.transform.position = gunPos.transform.position;
+
+            bulletObjectPool.Remove(bulletGO);
+        }
     }
 
     public static int degree = 15;
@@ -83,24 +158,32 @@ public class PlayerFire : MonoBehaviour
 
     void ExcuteSkill4()
     {
-        for(int i = 0; i < bulletNum; i++)
+        for (int i = 0; i < bulletNum; i++)
         {
-            GameObject bulletGO = Instantiate(bullet);
-            bulletGO.transform.position = gunPos.transform.position;
-            bulletGO.transform.rotation = Quaternion.Euler(new Vector3(0, 0, degree * i));
-            bulletGO.GetComponent<Bullet>().dir = bulletGO.transform.up;
+            if (bulletObjectPool.Count > 0)
+            {
+                GameObject bulletGO = bulletObjectPool[0];
+
+                bulletGO.SetActive(true);
+                bulletGO.transform.position = gunPos.transform.position;
+                bulletGO.transform.rotation = Quaternion.Euler(new Vector3(0, 0, degree * i));
+                bulletGO.GetComponent<Bullet>().dir = bulletGO.transform.up;
+
+                bulletObjectPool.Remove(bulletGO);
+            }
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Item")
+        if (other.gameObject.tag == "Item")
         {
-            if(skillLevel < 3)
+            if (skillLevel < 3)
             {
                 skillLevel++;
             }
-            Destroy(other.gameObject);
+            other.gameObject.SetActive(false);
+
         }
     }
 }
