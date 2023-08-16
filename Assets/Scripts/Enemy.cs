@@ -74,6 +74,9 @@ public class Enemy : MonoBehaviour
             GameObject explosionGO = Instantiate(explosion);
             explosionGO.transform.position = transform.position;
             otherObject.gameObject.SetActive(false);
+            PlayerFire playerFire = GameObject.Find("Player").GetComponent<PlayerFire>();
+            otherObject.transform.parent = GameManager.instance.player.transform;
+            playerFire.bulletObjectPool.Add(otherObject.gameObject);
             AudioSource audioSource = SoundManager.instance.GetComponent<SoundManager>().effAS;
             audioSource.clip = SoundManager.instance.GetComponent<SoundManager>().explosionAC[1];
             audioSource.Play();
@@ -81,6 +84,9 @@ public class Enemy : MonoBehaviour
         else
         {
             otherObject.gameObject.SetActive(false);
+            PlayerFire playerFire = GameObject.Find("Player").GetComponent<PlayerFire>();
+            otherObject.transform.parent = GameManager.instance.player.transform;
+            playerFire.bulletObjectPool.Add(otherObject.gameObject);
         }
     }
 

@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject player;
 
+    public EndingScreen endingScreen;
+
     private void Awake()
     {
         if(instance == null)
@@ -30,9 +32,11 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.Find("Player");
         attackScoreText.text = "0";
         destroyScoreText.text = "0";
         bestScore = PlayerPrefs.GetInt("Best Score");
+        bestScoreText.text = bestScore.ToString();
     }
 
     // Update is called once per frame
@@ -71,6 +75,7 @@ public class GameManager : MonoBehaviour
     public void SetBestScore()
     {
         bestScore = attackScore + destroyScore;
+        bestScoreText.text = bestScore.ToString();
 
         int tempBestScore = PlayerPrefs.GetInt("Best Score");
         if(bestScore > tempBestScore)
@@ -79,5 +84,29 @@ public class GameManager : MonoBehaviour
         }
 
         bestScoreText.text = bestScore.ToString();
+    }
+
+    public void GameOver()
+    {
+        endingScreen.gameObject.SetActive(true);
+        endingScreen.scoreText.text = bestScore.ToString();
+    }
+
+    public void Restart()
+    {
+        endingScreen.gameObject.SetActive(false);
+
+        player.SetActive(true);
+        player.GetComponent<PlayerMove>().hp = 10;
+        player.GetComponent<PlayerFire>().skillLevel = 0;
+
+        destroyScore = 0;
+        attackScore = 0;
+        bestScore = 0;
+    }
+
+    public void Exit()
+    {
+        Application.Quit();
     }
 }

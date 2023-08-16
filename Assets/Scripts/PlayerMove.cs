@@ -23,4 +23,9 @@ public class PlayerMove : MonoBehaviour
         //transform.position = transform.position + dir * speed * Time.deltaTime;
         transform.position += dir * speed * Time.deltaTime;
     }
+
+    private void OnDisable()
+    {
+        GameManager.instance.GameOver();
+    }
 }   

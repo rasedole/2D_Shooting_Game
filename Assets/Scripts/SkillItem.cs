@@ -16,7 +16,7 @@ public class SkillItem : MonoBehaviour
         transform.position += dir * speed * Time.deltaTime;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         GameObject effectGO = Instantiate(effect);
         effectGO.transform.position = transform.position;

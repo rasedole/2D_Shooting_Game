@@ -37,7 +37,6 @@ public class PlayerFire : MonoBehaviour
 
             // 순서4. 게임오브젝트를 비활성화 해준다.
             bulletGO.SetActive(false);
-            bulletGO.transform.parent = transform;
         }
     }
 
