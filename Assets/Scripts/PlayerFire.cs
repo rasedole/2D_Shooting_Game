@@ -22,6 +22,12 @@ public class PlayerFire : MonoBehaviour
     public int poolSize = 100;
     public List<GameObject> bulletObjectPool;
 
+    public void Fire()
+    {
+
+    }
+
+
     private void Start()
     {
         // 순서1. 불릿의 개수만큼의 배열을 생성한다.
@@ -43,19 +49,21 @@ public class PlayerFire : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+#if UNITY_EDITOR || UNITY_STANDALONE
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            ExcuteSkill(skillLevel);
+            ExcuteSkill();
 
             AudioSource audioSource = SoundManager.instance.GetComponent<SoundManager>().effAS;
             audioSource.clip = SoundManager.instance.GetComponent<SoundManager>().explosionAC[2];
             audioSource.Play();
         }
+#endif
     }
 
-    private void ExcuteSkill(int _skillLevel)
+    public void ExcuteSkill()
     {
-        switch (_skillLevel)
+        switch (skillLevel)
         {
             case 0:
                 ExcuteSkill1();

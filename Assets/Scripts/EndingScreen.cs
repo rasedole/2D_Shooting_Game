@@ -6,6 +6,4 @@ using TMPro;
 public class EndingScreen : MonoBehaviour
 {
     public TMP_Text scoreText;
-    public TMP_Text bestScoreText;
-    
 }
